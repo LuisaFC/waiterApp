@@ -38,11 +38,11 @@ router.post('/orders', (req, res) => {
 });
 
 //Change order status
-router.patch('/orders', (req, res) => {
+router.patch('/orders/orderId', (req, res) => {
   res.send('ok');
 });
 
 //Delete order
-router.delete('/orders', (req, res) => {
+router.delete('/orders/orderId', (req, res) => {
   res.send('ok');
 });
