@@ -1,26 +1,38 @@
+import path from 'node:path';
+
 import { Router } from 'express';
+import multer from 'multer';
+
+import { createCategory } from './app/useCases/categories/createCategory';
+import { listCategories } from './app/useCases/categories/listCategories';
+import { createProduct } from './app/useCases/products/createProducts';
+import { listProducts } from './app/useCases/products/listProducts';
 
 export const router = Router();
 
-//List categories
-router.get('/categories', (req, res) => {
-  res.send('ok');
+//Image upload saving it at the upload folder
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, callback) {
+      callback(null, path.resolve(__dirname, '..', 'uploads'));
+    },
+    filename(req, file, callback) {
+      callback(null, `${file.originalname}-${Date.now()}.png`);
+    }
+  })
 });
+
+//List categories
+router.get('/categories', listCategories);
 
 //Create category
-router.post('/categories', (req, res) => {
-  res.send('ok');
-});
+router.post('/categories', createCategory);
 
 //List products
-router.get('/products', (req, res) => {
-  res.send('ok');
-});
+router.get('/products', listProducts);
 
 //Create product
-router.post('/products', (req, res) => {
-  res.send('ok');
-});
+router.post('/products', upload.single('image'),  createProduct);
 
 //Get category by id
 router.get('/products/:categoryId/products', (req, res) => {
